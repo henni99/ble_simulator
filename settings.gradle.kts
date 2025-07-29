@@ -36,3 +36,4 @@ include(":feature:main")
 include(
     ":core:designsystem"
 )
+include(":core:model")

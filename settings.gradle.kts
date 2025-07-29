@@ -31,5 +31,8 @@ dependencyResolutionManagement {
 rootProject.name = "ble_simulator"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
-include(":feature")
 include(":feature:main")
+
+include(
+    ":core:designsystem"
+)

@@ -22,8 +22,8 @@ configureHiltAndroid()
 configureRoborazzi()
 
 dependencies {
-//    implementation(project(":core:designsystem"))
-//    implementation(project(":core:ui"))
+    implementation(project(":core:designsystem"))
+
 //
 //    testImplementation(project(":core:testing"))
 

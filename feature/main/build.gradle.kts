@@ -14,9 +14,8 @@ android {
     }
 }
 
+
 dependencies {
-
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
@@ -24,5 +23,5 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.kotlinx.immutable)
     androidTestImplementation(libs.hilt.android.testing)
-//    kspAndroidTest(libs.hilt.android.compiler)
+    kspAndroidTest(libs.hilt.android.compiler)
 }

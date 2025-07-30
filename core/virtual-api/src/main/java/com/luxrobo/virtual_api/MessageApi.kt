@@ -8,6 +8,9 @@ import kotlin.random.Random
 
 
 class MessageApi @Inject constructor() {
+
+    fun postMessage(message: Message) { }
+
     fun getMessage(bleDeviceInfoConnect: BleDeviceConnection): Message {
         return Message(
             deviceId = bleDeviceInfoConnect.deviceId,

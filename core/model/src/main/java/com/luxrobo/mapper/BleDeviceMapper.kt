@@ -5,5 +5,6 @@ import com.luxrobo.model.BleDeviceInfo
 
 fun BleDeviceConnection.toBleDeviceInfo() = BleDeviceInfo(
     deviceId = deviceId,
-    name = name
+    name = name,
+    rssi = rssi
 )

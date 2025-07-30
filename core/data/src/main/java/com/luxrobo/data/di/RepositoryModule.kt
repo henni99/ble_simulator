@@ -1,11 +1,9 @@
 package com.luxrobo.data.di
 
-import com.luxrobo.data.datasource.BleDeviceConnectionDataSource
-import com.luxrobo.data.datasource.BleDeviceConnectionDataSourceImpl
-import com.luxrobo.data.repository.BleDeviceConnectionRepository
-import com.luxrobo.data.repository.BleDeviceConnectionRepositoryImpl
-import com.luxrobo.data.repository.BleTransferRepository
-import com.luxrobo.data.repository.BleTransferRepositoryImpl
+import com.luxrobo.domain.repository.BleDeviceConnectionRepository
+import com.luxrobo.data.repositoryImpl.BleDeviceConnectionRepositoryImpl
+import com.luxrobo.domain.repository.BleTransferRepository
+import com.luxrobo.data.repositoryImpl.BleTransferRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

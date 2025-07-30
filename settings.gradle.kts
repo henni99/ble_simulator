@@ -39,3 +39,4 @@ include(
 include(":core:model")
 include(":core:virtual-api")
 include(":core:data")
+include(":core:domain")

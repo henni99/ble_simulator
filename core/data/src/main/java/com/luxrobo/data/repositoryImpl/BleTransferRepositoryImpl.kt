@@ -1,6 +1,7 @@
-package com.luxrobo.data.repository
+package com.luxrobo.data.repositoryImpl
 
 import com.luxrobo.data.datasource.BleTransferDataSource
+import com.luxrobo.domain.repository.BleTransferRepository
 import com.luxrobo.model.BleDeviceConnection
 import com.luxrobo.model.Message
 import kotlinx.coroutines.flow.Flow

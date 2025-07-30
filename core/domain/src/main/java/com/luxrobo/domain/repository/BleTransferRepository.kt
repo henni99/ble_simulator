@@ -1,4 +1,4 @@
-package com.luxrobo.data.repository
+package com.luxrobo.domain.repository
 
 import com.luxrobo.model.BleDeviceConnection
 import com.luxrobo.model.Message

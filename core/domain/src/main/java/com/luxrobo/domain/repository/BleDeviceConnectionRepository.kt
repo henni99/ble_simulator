@@ -1,9 +1,9 @@
-package com.luxrobo.data.repository
+package com.luxrobo.domain.repository
 
 import com.luxrobo.model.BleDeviceConnection
 import kotlinx.coroutines.flow.Flow
 
 interface BleDeviceConnectionRepository {
 
-    suspend fun getBleDeviceConnections(): Flow<List<BleDeviceConnection>>
+    fun getBleDeviceConnections(): Flow<List<BleDeviceConnection>>
 }

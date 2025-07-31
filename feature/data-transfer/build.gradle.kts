@@ -5,15 +5,12 @@ plugins {
 }
 
 android {
-    setNamespace("feature.device_list")
+    setNamespace("feature.data_transfer")
 }
-
 
 dependencies {
     implementation(projects.core.model)
     implementation(projects.core.domain)
-    implementation(projects.core.designsystem)
-//    implementation(projects.feature.deviceList)
 
     implementation(libs.kotlinx.datetime)
 

@@ -3,7 +3,7 @@
     <application>
 
         <activity
-            android:name="ble"
+            android:name="com.luxrobo.device_list.presentation.BleDeviceListActivity"
             android:configChanges="uiMode"
             android:exported="true">
 

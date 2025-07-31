@@ -4,6 +4,7 @@ import android.R
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.LocalContentColor
@@ -26,6 +27,7 @@ fun BasicTopAppBar(
     contentColor: Color = MaterialTheme.colorScheme.onSurface,
     containerColor: Color = MaterialTheme.colorScheme.surfaceDim,
     actionButtons: @Composable () -> Unit = {},
+    logoButtons: @Composable () -> Unit = {}
 ) {
     CompositionLocalProvider(LocalContentColor provides contentColor) {
 
@@ -36,9 +38,13 @@ fun BasicTopAppBar(
                 .background(containerColor)
                 .then(modifier)
         ) {
+            Row(Modifier.align(Alignment.CenterStart)) {
+                logoButtons()
+            }
 
-            actionButtons()
-
+            Row(Modifier.align(Alignment.CenterEnd)) {
+                actionButtons()
+            }
 
             Text(
                 text = stringResource(id = titleRes),

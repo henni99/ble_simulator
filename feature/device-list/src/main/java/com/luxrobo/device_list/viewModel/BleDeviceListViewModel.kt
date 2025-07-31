@@ -3,10 +3,12 @@ package com.luxrobo.device_list.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.luxrobo.domain.usecase.GetBleDeviceConnectionsUseCase
+import com.luxrobo.mapper.toBleDeviceInfo
 import com.luxrobo.model.BleDeviceConnection
 import com.luxrobo.model.BleDeviceInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -71,12 +73,14 @@ class BleDeviceListViewModel @Inject constructor(
             initialValue = BleDeviceListUiState.empty(),
         )
 
-    fun selectDevice(deviceInfo: BleDeviceInfo) = viewModelScope.launch {
-        if (deviceInfo.rssi > -75) {
-            _selectedDeviceId.update { deviceInfo.deviceId }
-            postSideEffect(BleDeviceListSideEffect.MoveToDetail(deviceInfo))
+    fun selectDevice(deviceConnection: BleDeviceConnection) = viewModelScope.launch {
+
+        if (deviceConnection.rssi >= -70) {
+            _selectedDeviceId.update { deviceConnection.deviceId }
+            delay(1000L)
+            postSideEffect(BleDeviceListSideEffect.MoveToDetail(deviceConnection.toBleDeviceInfo()))
         } else {
-            _isDialogShowed.update { Pair(true, getConnectionQuality(deviceInfo.rssi)) }
+            _isDialogShowed.update { Pair(true, getConnectionQuality(deviceConnection.rssi)) }
         }
     }
 
@@ -109,7 +113,7 @@ class BleDeviceListViewModel @Inject constructor(
             }
 
             is BleDeviceListIntent.SelectDevice -> {
-                selectDevice(intent.deviceInfo)
+                selectDevice(intent.deviceConnection)
             }
 
             is BleDeviceListIntent.DismissDialog -> {

@@ -4,5 +4,5 @@ import com.luxrobo.model.BleDeviceConnection
 
 interface BleDeviceConnectionDataSource {
 
-    suspend fun getBleDeviceConnections(): List<BleDeviceConnection>
+    fun getBleDeviceConnections(): List<BleDeviceConnection>
 }

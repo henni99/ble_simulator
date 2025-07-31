@@ -9,6 +9,7 @@ plugins {
 setNamespace("core.data")
 
 dependencies {
+    implementation(libs.kotlinx.datetime)
     implementation(projects.core.model)
     implementation(projects.core.domain)
     implementation(projects.core.virtualApi)

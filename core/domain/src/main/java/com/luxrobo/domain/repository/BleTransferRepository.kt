@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface BleTransferRepository {
 
-    fun postMessage(message: Message): Flow<Unit>
+    fun postMessage(message: Message): Flow<Message>
 
     fun getMessage(bleDeviceInfo: BleDeviceInfo): Flow<Message>
 }

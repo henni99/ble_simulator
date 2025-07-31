@@ -13,7 +13,7 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.domain)
     implementation(projects.core.designsystem)
-//    implementation(projects.feature.deviceList)
+    implementation(projects.feature.dataTransfer)
 
     implementation(libs.kotlinx.datetime)
 

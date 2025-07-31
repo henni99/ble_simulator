@@ -9,7 +9,7 @@ import javax.inject.Inject
 class BleTransferDataSourceImpl @Inject constructor(
     private val messageApi: MessageApi
 ) : BleTransferDataSource {
-    override fun postMessage(message: Message) {
+    override fun postMessage(message: Message): Message {
         return messageApi.postMessage(message)
     }
 

@@ -9,14 +9,18 @@ import kotlin.random.Random
 
 class MessageApi @Inject constructor() {
 
-    fun postMessage(message: Message) { }
+    fun postMessage(message: Message): Message {
+        return message
+    }
 
     fun getMessage(bleDeviceInfo: BleDeviceInfo): Message {
         return Message(
             deviceId = bleDeviceInfo.deviceId,
             name = bleDeviceInfo.name,
-            message = bleDeviceInfo.deviceId + " " + bleDeviceInfo.name + " " + getConnectionQuality(bleDeviceInfo.rssi)
-             + " " + generateRandomString(10)
+            message = "deviceId: " +  bleDeviceInfo.deviceId + "\n" +
+                      "name: " + bleDeviceInfo.name + "\n" +
+                      "rssi: " + getConnectionQuality(bleDeviceInfo.rssi) + "\n" +
+                      "random: " + generateRandomString(10) + "\n"
         )
     }
 }

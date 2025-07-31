@@ -3,6 +3,8 @@ package com.luxrobo.data_transfer.viewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.luxrobo.data_transfer.ext.ParcelableBleDeviceInfo
+import com.luxrobo.data_transfer.ext.toOrigin
 import com.luxrobo.domain.usecase.GetMessageUseCase
 import com.luxrobo.domain.usecase.PostMessageUseCase
 import com.luxrobo.model.BleDeviceInfo
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.toString
 
 @HiltViewModel
 class BleDataTransferViewModel @Inject constructor(
@@ -33,16 +36,14 @@ class BleDataTransferViewModel @Inject constructor(
     private val _sideEffect = Channel<BleTransferSideEffect>()
     val sideEffect get() = _sideEffect.receiveAsFlow()
 
-    val deviceInfo = savedStateHandle.getStateFlow<BleDeviceInfo?>("deviceInfo", null)
+    private val _deviceInfo = savedStateHandle.getStateFlow<ParcelableBleDeviceInfo?>("deviceInfo", null)
 
     private val _sendMessages: MutableStateFlow<List<Message>> = MutableStateFlow(emptyList())
 
-    val receiveMessages: StateFlow<List<Message>> =
-        deviceInfo.filterNotNull().flatMapLatest {
-            getMessageUseCase(it).map { receiveMessage ->
-
-                receiveMessage
-                receiveMessages.value + listOf(receiveMessage)
+    private val _receiveMessages: StateFlow<List<Message>> =
+        _deviceInfo.filterNotNull().flatMapLatest {
+            getMessageUseCase(it.toOrigin()).map { receiveMessage ->
+                _receiveMessages.value + listOf(receiveMessage)
             }
         }.stateIn(
             scope = viewModelScope,
@@ -51,18 +52,20 @@ class BleDataTransferViewModel @Inject constructor(
         )
 
 
-    val uiState: StateFlow<BleDataTransferUiState?> =
+    val uiState: StateFlow<BleDataTransferUiState> =
         combine(
-            deviceInfo,
+            _deviceInfo,
             _sendMessages,
-            receiveMessages
+            _receiveMessages
         ) { deviceInfo, sendMessages, receiveMessages ->
 
-            deviceInfo?.let {
+            if (deviceInfo == null) {
+                BleDataTransferUiState.empty()
+            } else {
                 BleDataTransferUiState(
-                    deviceInfo = deviceInfo,
-                    sendMessages = sendMessages.toPersistentList(),
-                    receiveMessages = receiveMessages.toPersistentList()
+                    deviceInfo = deviceInfo.toOrigin(),
+                    sendMessages = sendMessages.joinToString(separator = "\n") { it.message },
+                    receiveMessages = receiveMessages.joinToString(separator = "\n") { it.message }
                 )
             }
 
@@ -75,13 +78,13 @@ class BleDataTransferViewModel @Inject constructor(
     fun postMessage(msg: String) = viewModelScope.launch {
         postMessageUseCase(
             Message(
-                deviceId = deviceInfo.value?.deviceId ?: "",
-                name = deviceInfo.value?.name ?: "",
+                deviceId = _deviceInfo.value?.deviceId ?: "",
+                name = _deviceInfo.value?.name ?: "",
                 message = msg
             )
-        ).collect {
+        ).collect { message ->
             _sendMessages.update {
-                _sendMessages.value + it
+                _sendMessages.value + listOf(message)
             }
         }
     }

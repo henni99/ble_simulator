@@ -10,7 +10,7 @@ import javax.inject.Singleton
 class PostMessageUseCase @Inject constructor(
     private val bleTransferRepository: BleTransferRepository
 ) {
-    operator fun invoke(message: Message): Flow<Unit> {
+    operator fun invoke(message: Message): Flow<Message> {
         return bleTransferRepository.postMessage(message)
 
     }

@@ -7,7 +7,7 @@ import javax.inject.Inject
 class BleDeviceConnectionDataSourceImpl @Inject constructor(
     private val deviceApi: DeviceApi
 ): BleDeviceConnectionDataSource {
-    override suspend fun getBleDeviceConnections(): List<BleDeviceConnection> {
+    override fun getBleDeviceConnections(): List<BleDeviceConnection> {
         return deviceApi.getDeviceConnections()
     }
 }

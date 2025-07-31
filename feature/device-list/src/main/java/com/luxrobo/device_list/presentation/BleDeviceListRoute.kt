@@ -1,7 +1,6 @@
 package com.luxrobo.device_list.presentation
 
 import android.content.Intent
-import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -15,6 +14,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.luxrobo.data_transfer.presentation.BleDataTransferActivity
+import com.luxrobo.data_transfer.ext.toParcelize
 import com.luxrobo.device_list.viewModel.BleDeviceListSideEffect
 import com.luxrobo.device_list.viewModel.BleDeviceListViewModel
 
@@ -51,9 +52,9 @@ fun BleDeviceListRoute(
 
                     is BleDeviceListSideEffect.MoveToDetail -> {
 
-//                        val intent = Intent(context, BleDataTransferActivity::class.java)
-//                        intent.putExtra("deviceInfo", sideEffect.deviceInfo)
-//                        context.startActivity(intent)
+                        val intent = Intent(context, BleDataTransferActivity::class.java)
+                        intent.putExtra("deviceInfo", sideEffect.deviceInfo.toParcelize())
+                        context.startActivity(intent)
                     }
                 }
             }

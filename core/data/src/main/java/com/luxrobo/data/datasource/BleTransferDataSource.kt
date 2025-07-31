@@ -6,7 +6,7 @@ import com.luxrobo.model.Message
 
 interface BleTransferDataSource {
 
-    fun postMessage(message: Message): Unit
+    fun postMessage(message: Message): Message
 
     fun getMessage(bleDeviceInfo: BleDeviceInfo): Message
 }

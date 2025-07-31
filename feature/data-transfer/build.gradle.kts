@@ -2,6 +2,7 @@ import com.luxrobo.ble_simulator.setNamespace
 
 plugins {
     alias(libs.plugins.luxrobo.android.feature)
+    id("kotlin-parcelize")
 }
 
 android {

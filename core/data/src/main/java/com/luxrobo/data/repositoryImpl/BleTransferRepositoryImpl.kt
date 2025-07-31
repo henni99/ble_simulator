@@ -5,6 +5,7 @@ import com.luxrobo.domain.repository.BleTransferRepository
 import com.luxrobo.model.BleDeviceConnection
 import com.luxrobo.model.BleDeviceInfo
 import com.luxrobo.model.Message
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -12,7 +13,7 @@ import javax.inject.Inject
 class BleTransferRepositoryImpl @Inject constructor(
     private val bleTransferDataSource: BleTransferDataSource
 ) : BleTransferRepository {
-    override fun postMessage(message: Message): Flow<Unit> {
+    override fun postMessage(message: Message): Flow<Message> {
         return flow {
             emit(bleTransferDataSource.postMessage(message))
         }
@@ -20,7 +21,10 @@ class BleTransferRepositoryImpl @Inject constructor(
 
     override fun getMessage(bleDeviceInfo: BleDeviceInfo): Flow<Message> {
         return flow {
-            emit(bleTransferDataSource.getMessage(bleDeviceInfo))
+            while(true) {
+                emit(bleTransferDataSource.getMessage(bleDeviceInfo))
+                delay(1000L)
+            }
         }
     }
 

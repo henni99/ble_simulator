@@ -11,11 +11,11 @@ class MessageApi @Inject constructor() {
 
     fun postMessage(message: Message) { }
 
-    fun getMessage(bleDeviceInfoConnect: BleDeviceConnection): Message {
+    fun getMessage(bleDeviceInfo: BleDeviceInfo): Message {
         return Message(
-            deviceId = bleDeviceInfoConnect.deviceId,
-            name = bleDeviceInfoConnect.name,
-            message = bleDeviceInfoConnect.deviceId + " " + bleDeviceInfoConnect.name + " " + getConnectionQuality(bleDeviceInfoConnect.rssi)
+            deviceId = bleDeviceInfo.deviceId,
+            name = bleDeviceInfo.name,
+            message = bleDeviceInfo.deviceId + " " + bleDeviceInfo.name + " " + getConnectionQuality(bleDeviceInfo.rssi)
              + " " + generateRandomString(10)
         )
     }

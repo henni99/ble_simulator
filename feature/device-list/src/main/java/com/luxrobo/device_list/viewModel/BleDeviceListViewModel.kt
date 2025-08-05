@@ -50,7 +50,7 @@ class BleDeviceListViewModel @Inject constructor(
 
     val uiState: StateFlow<BleDeviceListUiState> =
         combine(
-            controlledBleDeviceFlow(),
+            getBleDeviceConnectionsUseCase(),
             _selectedDeviceId,
             _isScanning,
             _isDialogShowed

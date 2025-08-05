@@ -1,13 +1,12 @@
 package com.luxrobo.data.repositoryImpl
 
 import app.cash.turbine.test
-import com.luxrobo.data.datasource.BleDeviceConnectionDataSource
+import com.luxrobo.data.datasourceImpl.BleDeviceConnectionDataSource
 import com.luxrobo.model.BleDeviceConnection
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever

@@ -51,7 +51,7 @@ object LuxColor {
     val Neon05 = Color(0xFFEEFFE7)
 
     @Stable
-    val Blue01 = Color(0xFF215BF6)
+    val Blue01 = Color(0xFF3182F6)
 
     @Stable
     val Blue02 = Color(0xFF5180FF)

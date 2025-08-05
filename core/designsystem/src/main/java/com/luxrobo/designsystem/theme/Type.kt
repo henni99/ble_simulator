@@ -9,14 +9,13 @@ import androidx.compose.ui.unit.sp
 
 private val SansSerifStyle = TextStyle(
     fontFamily = FontFamily.SansSerif,
-    fontWeight = FontWeight.Normal,
+    fontWeight = FontWeight.Bold,
 )
 
 internal val Typography = LuxTypography(
     titleLargeB = SansSerifStyle.copy(
         fontSize = 22.sp,
         lineHeight = 28.sp,
-        fontWeight = FontWeight.Black,
     ),
     bodyLargeR = SansSerifStyle.copy(
         fontSize = 16.sp,

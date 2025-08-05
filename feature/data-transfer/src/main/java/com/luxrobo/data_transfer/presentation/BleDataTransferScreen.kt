@@ -74,6 +74,38 @@ fun BleDataTransferContent(
         modifier = Modifier
             .fillMaxSize()
     ) {
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = "deviceId",
+            style = LuxTheme.typography.titleLargeB
+        )
+
+        Spacer(Modifier.height(4.dp))
+
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = uiState.deviceInfo?.deviceId.toString(),
+            style = LuxTheme.typography.bodyLargeR
+        )
+
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = "Device Name",
+            style = LuxTheme.typography.titleLargeB
+        )
+
+        Spacer(Modifier.height(4.dp))
+
+        Text(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            text = uiState.deviceInfo?.name.toString(),
+            style = LuxTheme.typography.bodyLargeR
+        )
+
+        Spacer(Modifier.height(8.dp))
+
         Column(
             modifier = Modifier
                 .weight(1f)

@@ -12,6 +12,13 @@ android {
         testInstrumentationRunner =
             "com.luxrobo.ble_simulator.core.testing.runner.luxroboTestRunner"
     }
+    
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
+        }
+    }
 }
 
 

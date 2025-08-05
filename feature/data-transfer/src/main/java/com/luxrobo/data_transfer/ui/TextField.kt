@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import com.luxrobo.designsystem.component.VerticalSpacer
 import com.luxrobo.designsystem.theme.LuxTheme
 
 @Composable
@@ -52,7 +53,7 @@ fun ScrollableReadOnlyTextField(
         style = LuxTheme.typography.titleLargeB
     )
 
-    Spacer(Modifier.height(8.dp))
+    VerticalSpacer(8.dp)
 
     Box(
         modifier = modifier

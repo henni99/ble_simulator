@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "F"
+    namespace = "com.luxrobo.ble_simulator"
 
     defaultConfig {
         applicationId = "com.luxrobo.ble_simulator"

@@ -25,7 +25,7 @@ dependencies {
     implementation(project(":core:designsystem"))
 
 //
-//    testImplementation(project(":core:testing"))
+    testImplementation(project(":core:testing"))
 
     implementation(findLibrary("hilt.navigation.compose"))
     implementation(findLibrary("androidx.compose.navigation"))

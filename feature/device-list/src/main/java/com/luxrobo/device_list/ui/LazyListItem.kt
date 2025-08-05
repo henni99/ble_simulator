@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luxrobo.ble_simulator.feature.device_list.R
 import com.luxrobo.designsystem.component.BasicCard
+import com.luxrobo.designsystem.component.HorizontalSpacer
+import com.luxrobo.designsystem.component.VerticalSpacer
 import com.luxrobo.designsystem.theme.LuxColor.Blue01
 import com.luxrobo.designsystem.theme.LuxColor.White
 import com.luxrobo.designsystem.theme.LuxTheme
@@ -63,7 +65,7 @@ fun BleDeviceConnection(
                     maxLines = 1
                 )
 
-                Spacer(Modifier.height(4.dp))
+                VerticalSpacer(4.dp)
 
                 Text(
                     style = LuxTheme.typography.bodyLargeR,
@@ -76,7 +78,7 @@ fun BleDeviceConnection(
                 )
             }
 
-            Spacer(modifier = Modifier.width(16.dp))
+            HorizontalSpacer(16.dp)
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -105,7 +107,7 @@ fun BleDeviceConnection(
                     )
                 }
 
-                Spacer(Modifier.height(4.dp))
+                VerticalSpacer(4.dp)
 
                 Row (
                     verticalAlignment = Alignment.CenterVertically
@@ -123,7 +125,7 @@ fun BleDeviceConnection(
                         contentDescription = null
                     )
 
-                    Spacer(modifier = Modifier.width(4.dp))
+                    HorizontalSpacer(4.dp)
 
                     Text(
                         style = LuxTheme.typography.bodyLargeR,

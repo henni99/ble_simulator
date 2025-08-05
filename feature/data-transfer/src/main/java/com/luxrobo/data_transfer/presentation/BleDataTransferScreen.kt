@@ -25,6 +25,7 @@ import com.luxrobo.data_transfer.ui.ScrollableReadOnlyTextField
 import com.luxrobo.data_transfer.viewModel.BleDataTransferIntent
 import com.luxrobo.data_transfer.viewModel.BleDataTransferUiState
 import com.luxrobo.designsystem.component.BasicTopAppBar
+import com.luxrobo.designsystem.component.VerticalSpacer
 import com.luxrobo.designsystem.theme.LuxTheme
 
 @Composable
@@ -80,7 +81,7 @@ fun BleDataTransferContent(
             style = LuxTheme.typography.titleLargeB
         )
 
-        Spacer(Modifier.height(4.dp))
+        VerticalSpacer(4.dp)
 
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -88,7 +89,7 @@ fun BleDataTransferContent(
             style = LuxTheme.typography.bodyLargeR
         )
 
-        Spacer(Modifier.height(8.dp))
+        VerticalSpacer(8.dp)
 
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -96,7 +97,7 @@ fun BleDataTransferContent(
             style = LuxTheme.typography.titleLargeB
         )
 
-        Spacer(Modifier.height(4.dp))
+        VerticalSpacer(4.dp)
 
         Text(
             modifier = Modifier.padding(horizontal = 16.dp),
@@ -104,7 +105,7 @@ fun BleDataTransferContent(
             style = LuxTheme.typography.bodyLargeR
         )
 
-        Spacer(Modifier.height(8.dp))
+        VerticalSpacer(8.dp)
 
         Column(
             modifier = Modifier
@@ -117,7 +118,7 @@ fun BleDataTransferContent(
                 text = uiState.sendMessages
             )
 
-            Spacer(Modifier.height(16.dp))
+            VerticalSpacer(16.dp)
 
             ScrollableReadOnlyTextField(
                 modifier = Modifier.weight(1f),

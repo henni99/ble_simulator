@@ -27,7 +27,7 @@ fun BasicCard(
             .testTag("카드"),
         color = color,
         contentColor = contentColor,
-        shape = RoundedCornerShape(32.dp),
+        shape = RoundedCornerShape(24.dp),
         shadowElevation = 2.dp,
         content = content,
     )

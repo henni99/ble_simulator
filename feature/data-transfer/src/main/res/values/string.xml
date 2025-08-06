@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="data_transfer_screen">데이터 송수신 화면</string>
-    <string name="receive_log">수신 로그 (1초)</string>
+    <string name="receive_log">수신 로그</string>
     <string name="send_log">송신 로그</string>
     <string name="connection_closed">연결 종료</string>
+    <string name="device_info">디바이스 정보</string>
 </resources>

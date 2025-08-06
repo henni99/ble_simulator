@@ -1,5 +1,6 @@
 package com.luxrobo.data_transfer.presentation
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,6 +48,7 @@ fun BleDataTransferScreen(
     handleIntent: (BleDataTransferIntent) -> Unit
 ) {
     var text by rememberSaveable { mutableStateOf("") }
+    val configuration = LocalConfiguration.current
 
     Scaffold(
         modifier = Modifier
@@ -81,16 +84,26 @@ fun BleDataTransferScreen(
             )
         }
     ) { paddingValues ->
-        BleDataTransferContent(
-            modifier = Modifier
-                .padding(paddingValues),
-            uiState = uiState
-        )
+
+        if(configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            BleDataTransferPortraitContent(
+                modifier = Modifier
+                    .padding(paddingValues),
+                uiState = uiState
+            )
+        } else {
+            BleDataTransferLandscapeContent(
+                modifier = Modifier
+                    .padding(paddingValues),
+                uiState = uiState
+            )
+        }
+
     }
 }
 
 @Composable
-fun BleDataTransferContent(
+fun BleDataTransferPortraitContent(
     modifier: Modifier = Modifier,
     uiState: BleDataTransferUiState,
 ) {
@@ -101,47 +114,7 @@ fun BleDataTransferContent(
             .background(Color.White)
     ) {
 
-        Column(
-            modifier = Modifier
-                .padding(
-                    vertical = 4.dp,
-                    horizontal = 16.dp
-                )
-        ) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Start,
-                text = "디바이스 정보",
-                fontSize = 16.sp,
-                style = LuxTheme.typography.titleLargeB
-            )
-
-            VerticalSpacer(8.dp)
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 4.dp),
-                color = Color.DarkGray,
-                text = uiState.deviceInfo?.name.toString(),
-                style = LuxTheme.typography.bodyLargeR
-            )
-
-            VerticalSpacer(8.dp)
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 4.dp),
-                text = uiState.deviceInfo?.deviceId.toString(),
-                color = Color.DarkGray,
-                style = LuxTheme.typography.bodyLargeR
-            )
-        }
+        DeviceInfoContent(uiState)
 
         VerticalSpacer(8.dp)
 
@@ -183,6 +156,104 @@ fun BleDataTransferContent(
             }
         }
     }
-
-
 }
+
+@Composable
+fun BleDataTransferLandscapeContent(
+    modifier: Modifier = Modifier,
+    uiState: BleDataTransferUiState,
+) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
+
+        item {
+            DeviceInfoContent(
+                uiState
+            )
+        }
+
+        item {
+            Column(
+                modifier = Modifier
+                    .padding(
+                        vertical = 4.dp,
+                        horizontal = 16.dp
+                    )
+            ) {
+                VerticalSpacer(8.dp)
+
+                Column(
+                    modifier = Modifier
+                ) {
+                    ScrollableReadOnlyTextField(
+                        modifier = Modifier
+                            .height(200.dp),
+                        title = stringResource(R.string.send_log),
+                        text = uiState.sendMessages
+                    )
+
+                    VerticalSpacer(16.dp)
+
+                    ScrollableReadOnlyTextField(
+                        modifier = Modifier
+                            .height(200.dp),
+                        title = stringResource(R.string.receive_log),
+                        text = uiState.receiveMessages
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DeviceInfoContent(
+    uiState: BleDataTransferUiState,
+    text: String = stringResource(R.string.device_info)
+) {
+    Column(
+        modifier = Modifier
+            .padding(
+                vertical = 4.dp,
+                horizontal = 16.dp
+            )
+    ) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Start,
+            text = text,
+            fontSize = 16.sp,
+            style = LuxTheme.typography.titleLargeB
+        )
+
+        VerticalSpacer(8.dp)
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp),
+            color = Color.DarkGray,
+            text = uiState.deviceInfo?.name.toString(),
+            style = LuxTheme.typography.bodyLargeR
+        )
+
+        VerticalSpacer(8.dp)
+
+        Text(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 4.dp),
+            text = uiState.deviceInfo?.deviceId.toString(),
+            color = Color.DarkGray,
+            style = LuxTheme.typography.bodyLargeR
+        )
+    }
+}
+

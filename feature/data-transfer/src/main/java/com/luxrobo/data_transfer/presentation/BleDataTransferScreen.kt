@@ -8,7 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,16 +47,16 @@ fun BleDataTransferScreen(
     ) {
         BasicTopAppBar(
             titleRes = R.string.data_transfer_screen,
-            actionButtons = {
-                Button(
+            logoButtons = {
+
+                IconButton(
                     onClick = {
                         handleIntent(BleDataTransferIntent.Disconnect)
-                    },
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 0.dp),
+                    }
                 ) {
-                    Text(
-                        text = stringResource(R.string.connection_closed),
-                        style = LuxTheme.typography.bodyLargeR
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                        contentDescription = stringResource(R.string.connection_closed)
                     )
                 }
             }

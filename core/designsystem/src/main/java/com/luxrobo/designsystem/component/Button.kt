@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.luxrobo.designsystem.theme.LuxColor.Blue01
 import com.luxrobo.designsystem.theme.LuxTheme
 
@@ -73,7 +74,7 @@ fun SpringyButton(
     ) {
         Text(
             style = LuxTheme.typography.titleLargeB,
-            modifier = Modifier.padding(vertical = 4.dp),
+            modifier = Modifier.padding(vertical = 8.dp),
             text = text,
         )
     }

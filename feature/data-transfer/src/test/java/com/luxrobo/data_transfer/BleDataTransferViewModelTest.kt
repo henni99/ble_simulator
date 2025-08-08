@@ -30,8 +30,7 @@ class BleDataTransferViewModelTest {
     @get:Rule
     val dispatcherRule = MainDispatcherRule()
 
-    private val savedStateHandle =
-        mockk<SavedStateHandle>(relaxed = true) // relaxed = true allows un-stubbed calls
+    private val savedStateHandle = mockk<SavedStateHandle>()
     private val getMessageUseCase = mockk<GetMessageUseCase>()
     private val postMessageUseCase = mockk<PostMessageUseCase>()
 
@@ -69,23 +68,24 @@ class BleDataTransferViewModelTest {
             BleDataTransferViewModel(savedStateHandle, getMessageUseCase, postMessageUseCase)
     }
 
-    // --- uiState Tests ---
-
     @Test
-    fun `uiState should be empty if no deviceInfo in SavedStateHandle`() = runTest {
-        // Simulate no device info in SavedStateHandle
+    fun `SavedStateHandle에 deviceInfo가 없으면 uiState는 비어있어야 한다`() = runTest {
+        // Given
         every {
             savedStateHandle.getStateFlow<ParcelableBleDeviceInfo?>(
                 "deviceInfo",
                 null
             )
         } returns MutableStateFlow(null)
+
+        // When
         viewModel = BleDataTransferViewModel(
             savedStateHandle,
             getMessageUseCase,
             postMessageUseCase
-        ) // Re-initialize ViewModel
+        )
 
+        // Then
         viewModel.uiState.test {
             val initialState = awaitItem()
             assertEquals(BleDataTransferUiState.empty(), initialState)
@@ -97,9 +97,9 @@ class BleDataTransferViewModelTest {
         }
     }
 
-    // --- postMessage Tests ---
     @Test
-    fun `postMessage should add message to sendMessages and update uiState`() = runTest {
+    fun `postMessage 호출 시 sendMessages에 메시지가 추가되고 uiState가 갱신된다`() = runTest {
+        // Given
         val testMsgContent = "test post message"
         coEvery { postMessageUseCase.invoke(testPostMessage) } returns flowOf(testPostMessage)
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } answers { flowOf(testGetMessage) }
@@ -107,7 +107,10 @@ class BleDataTransferViewModelTest {
         viewModel.uiState.test {
             val initialState = awaitItem()
 
+            // When
             viewModel.postMessage(testMsgContent)
+
+            // Then
             val updatedUiState1 = awaitItem()
             assertEquals(updatedUiState1.sendMessages, initialState.sendMessages + testMsgContent)
 
@@ -116,7 +119,8 @@ class BleDataTransferViewModelTest {
     }
 
     @Test
-    fun `postMessage should handle multiple messages in sendMessages`() = runTest {
+    fun `postMessage가 여러 번 호출되면 sendMessages에 줄바꿈으로 누적된다`() = runTest {
+        // Given
         val testMsgContent = "test post message"
         coEvery { postMessageUseCase.invoke(testPostMessage) } returns flowOf(testPostMessage)
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } answers { flowOf(testGetMessage) }
@@ -124,13 +128,15 @@ class BleDataTransferViewModelTest {
         viewModel.uiState.test {
             val initialState = awaitItem()
 
+            // When
             viewModel.postMessage(testMsgContent)
             val updatedUiState1 = awaitItem()
-            assertEquals(updatedUiState1.sendMessages, initialState.sendMessages + testMsgContent)
 
             viewModel.postMessage(testMsgContent)
             val updatedUiState2 = awaitItem()
 
+            // Then
+            assertEquals(updatedUiState1.sendMessages, initialState.sendMessages + testMsgContent)
             assertEquals(
                 updatedUiState2.sendMessages,
                 updatedUiState1.sendMessages + "\n" + testMsgContent
@@ -140,10 +146,9 @@ class BleDataTransferViewModelTest {
         }
     }
 
-    // --- _receiveMessages and getMessageUseCase Tests ---
-
     @Test
-    fun `receiveMessages should update uiState when getMessageUseCase emits`() = runTest {
+    fun `getMessageUseCase가 emit하면 receiveMessages가 갱신된다`() = runTest {
+        // Given
         val testGetContent = "test get message"
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } returns flow {
             while (true) {
@@ -152,6 +157,7 @@ class BleDataTransferViewModelTest {
             }
         }
 
+        // When & Then
         viewModel.uiState.test {
             val initialState = awaitItem()
             assertEquals(testGetContent, initialState.receiveMessages)
@@ -162,20 +168,21 @@ class BleDataTransferViewModelTest {
             testScheduler.advanceTimeBy(1L)
             val secondUpdate = awaitItem()
             assertEquals("$testGetContent\n$testGetContent", secondUpdate.receiveMessages)
-
         }
     }
 
-    // --- disconnect Tests ---
 
     @Test
-    fun `handleIntent Disconnect should call disconnect`() = runTest {
+    fun `handleIntent가 Disconnect면 disconnect 동작이 수행된다`() = runTest {
+        // Given
         coEvery { postMessageUseCase.invoke(testPostMessage) } answers { flowOf(testPostMessage) }
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } answers { flowOf(testGetMessage) }
 
-
+        // When
         viewModel.sideEffect.test {
             viewModel.handleIntent(BleDataTransferIntent.Disconnect)
+
+            // Then
             val sideEffect = awaitItem()
             assertEquals(BleTransferSideEffect.Finish, sideEffect)
             cancelAndIgnoreRemainingEvents()
@@ -183,7 +190,8 @@ class BleDataTransferViewModelTest {
     }
 
     @Test
-    fun `handleIntent PostMessage should call postMessage and update uiState`() = runTest {
+    fun `handleIntent가 PostMessage면 postMessage가 호출되고 uiState가 갱신된다`() = runTest {
+        // Given
         coEvery { postMessageUseCase.invoke(testPostMessage) } answers { flowOf(testPostMessage) }
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } answers { flowOf(testGetMessage) }
 
@@ -192,8 +200,10 @@ class BleDataTransferViewModelTest {
         viewModel.uiState.test {
             awaitItem() // Initial state
 
+            // When
             viewModel.handleIntent(BleDataTransferIntent.PostMessage(testMsgContent))
 
+            // Then
             val updatedState = awaitItem()
             assertEquals(testPostMessage.message, updatedState.sendMessages)
             assertEquals(testOriginDeviceInfo, updatedState.deviceInfo)
@@ -202,17 +212,19 @@ class BleDataTransferViewModelTest {
         }
     }
 
-    // --- postSideEffect Tests ---
-
     @Test
-    fun `postSideEffect should send the given effect`() = runTest {
+    fun `postSideEffect가 호출되면 해당 사이드이펙트가 전송된다`() = runTest {
+        // Given
         coEvery { postMessageUseCase.invoke(testPostMessage) } answers { flowOf(testPostMessage) }
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } answers { flowOf(testGetMessage) }
 
-        val testSideEffect = BleTransferSideEffect.Finish // Using an existing side effect type
+        val testSideEffect = BleTransferSideEffect.Finish
 
+        // When
         viewModel.sideEffect.test {
             viewModel.postSideEffect(testSideEffect)
+
+            // Then
             val receivedEffect = awaitItem()
             assertEquals(testSideEffect, receivedEffect)
             cancelAndIgnoreRemainingEvents()

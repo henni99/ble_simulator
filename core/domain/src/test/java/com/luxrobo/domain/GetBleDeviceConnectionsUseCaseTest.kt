@@ -62,7 +62,5 @@ class GetBleDeviceConnectionsUseCaseTest  {
             assertEquals(expectedConnections, result)
             awaitComplete()
         }
-
-
     }
 }

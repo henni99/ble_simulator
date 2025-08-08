@@ -7,5 +7,14 @@
     <string name="common_confirm">확인</string>
     <string name="bluetooth_list_connecting_status">연결 시도</string>
 
+    <string name="scan_start">스캔 시작</string>
+
+
+    <string name="test_tag_scan_animation">스캔 애니메이션</string>
+    <string name="test_tag_loading">로딩</string>
+    <string name="test_tag_dialog">다이얼로그</string>
+    <string name="test_tag_card">카드</string>
+
+    <string name="test_tag_connection_button">연결 버튼</string>
 
 </resources>

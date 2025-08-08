@@ -36,8 +36,7 @@ fun BasicCard(
     content: @Composable () -> Unit,
 ) {
     Surface(
-        modifier = modifier.fillMaxWidth()
-            .testTag("카드"),
+        modifier = modifier.fillMaxWidth(),
         color = color,
         contentColor = contentColor,
         shape = RoundedCornerShape(24.dp),

@@ -43,7 +43,9 @@ fun BleDeviceConnection(
     uiState: BleDeviceConnection,
     handleIntent: (BleDeviceListIntent) -> Unit
 ) {
-    BasicCard {
+    BasicCard(
+        modifier = Modifier.testTag(stringResource(R.string.test_tag_card))
+    ) {
         Row(
             modifier = Modifier
                 .background(Color.White)
@@ -83,7 +85,7 @@ fun BleDeviceConnection(
             ) {
                 Button(
                     modifier = Modifier
-                        .testTag("연결 버튼")
+                        .testTag(stringResource(R.string.test_tag_connection_button))
                         .wrapContentHeight(),
                     enabled = !uiState.isConnecting,
                     colors = ButtonDefaults.buttonColors(
@@ -131,8 +133,6 @@ fun BleDeviceConnection(
                     )
                 }
             }
-
-
         }
     }
 }

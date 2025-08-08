@@ -30,7 +30,7 @@ class GetMessageUseCaseTest {
     }
 
     @Test
-    fun `invoke should return message from repository`() = runTest {
+    fun `가상으로 받아오는 메시지를 정상적으로 반환한다`() = runTest {
         val bleDeviceInfo = BleDeviceInfo(
             deviceId = "123e4567-e89b-12d3-a456-426614174000",
             name = "BLE_DEVICE_001",

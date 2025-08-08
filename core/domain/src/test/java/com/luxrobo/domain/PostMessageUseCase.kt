@@ -31,7 +31,8 @@ class PostMessageUseCaseTest {
     }
 
     @Test
-    fun `invoke should return message from repository`() = runTest {
+    fun `전달한 메시지를 그대로 받아온다`() = runTest {
+        // given
         val message = Message(
             deviceId = "123e4567-e89b-12d3-a456-426614174000",
             name = "BLE_DEVICE_001",

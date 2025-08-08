@@ -33,9 +33,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 include(":feature:main")
 
-include(
-    ":core:designsystem"
-)
+include(":core:designsystem")
 include(":core:model")
 include(":core:virtual-api")
 include(":core:data")

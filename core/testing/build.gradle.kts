@@ -16,12 +16,9 @@ dependencies {
     api(libs.mockk)
     api(libs.turbine)
     api(libs.coroutines.test)
-    api(libs.roborazziRule)
     api(libs.androidx.compose.ui.test)
     implementation(libs.hilt.android.testing)
     implementation(libs.androidx.compose.ui.test)
-    implementation(libs.roborazzi)
     implementation(libs.androidx.runner)
     implementation(projects.core.designsystem)
-//    implementation(projects.feature)
 }

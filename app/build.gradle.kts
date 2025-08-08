@@ -2,8 +2,6 @@ import com.luxrobo.ble_simulator.filterProject
 
 plugins {
     alias(libs.plugins.luxrobo.android.application)
-    alias(libs.plugins.baselineprofile)
-    alias(libs.plugins.roborazzi.plugin)
 }
 
 android {
@@ -26,28 +24,16 @@ android {
         getByName("release") {
             signingConfig = signingConfigs.getByName("debug")
         }
-
-        create("benchmark") {
-            matchingFallbacks.add("release")
-            signingConfig = signingConfigs.getByName("debug")
-            isDebuggable = false
-        }
     }
-
-
-
 }
 
 dependencies {
 
     rootProject.subprojects.filterProject {
-        if (it.name.contains("baselineprofile")) {
-            baselineProfile(it)
-        } else if (it.name.contains("testing")) {
+        if (it.name.contains("testing")) {
             testImplementation(it)
         } else {
             implementation(it)
         }
     }
-    implementation(libs.androidx.profileinstaller)
 }

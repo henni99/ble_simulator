@@ -39,17 +39,9 @@ kotlin {
 dependencies {
     implementation(libs.android.gradlePlugin)
     implementation(libs.kotlin.gradlePlugin)
-    implementation(libs.verify.detektPlugin)
     compileOnly(libs.plugin.kotlin.serializationPlugin)
     compileOnly(libs.compose.compiler.gradle.plugin)
     compileOnly(libs.plugin.android.junit5)
-}
-
-tasks {
-    validatePlugins {
-        enableStricterValidation = true
-        failOnWarning = true
-    }
 }
 
 gradlePlugin {

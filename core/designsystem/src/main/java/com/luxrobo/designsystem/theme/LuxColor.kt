@@ -24,7 +24,7 @@ object LuxColor {
     val Gray = Color(0xFFC2C2C2)
 
     @Stable
-    val DuskGray = Color(0xFF868686)
+    val DuskGray = Color(0xFFF0F0F0)
 
     @Stable
     val DarkGray = Color(0xFF5E5E5E)

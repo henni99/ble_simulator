@@ -26,6 +26,22 @@ import androidx.compose.ui.unit.sp
 import com.luxrobo.designsystem.theme.LuxColor.Blue01
 import com.luxrobo.designsystem.theme.LuxTheme
 
+/**
+ * SpringyButton
+ *
+ * 스프링 애니메이션이 적용된 커스텀 버튼 컴포저블.
+ * 버튼이 눌렸을 때 크기가 살짝 줄어들며, 손을 떼면 원래 크기로 부드럽게 복귀합니다.
+ * MotionEvent를 직접 감지하여 눌림/취소/해제 상태를 제어하고,
+ * onClick 동작은 ACTION_UP 시점에 실행됩니다.
+ *
+ * @param modifier       외부에서 전달받는 Modifier
+ * @param enabled        버튼 활성화 여부
+ * @param containerColor 버튼 배경 색상
+ * @param contentColor   버튼 내부 콘텐츠(텍스트/아이콘) 색상
+ * @param text           버튼에 표시될 텍스트
+ * @param onClick        버튼 클릭 시 실행할 람다
+ */
+
 @Composable
 fun SpringyButton(
     modifier: Modifier = Modifier,

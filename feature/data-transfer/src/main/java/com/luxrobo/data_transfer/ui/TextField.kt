@@ -36,8 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.luxrobo.designsystem.component.VerticalSpacer
 import com.luxrobo.designsystem.theme.LuxColor.Blue01
+import com.luxrobo.designsystem.theme.LuxColor.DuskGray
 import com.luxrobo.designsystem.theme.LuxTheme
-import com.luxrobo.designsystem.theme.LuxTypography
 
 @Composable
 fun ScrollableReadOnlyTextField(
@@ -105,7 +105,7 @@ fun MessageInputRow(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color(0xFFF0F0F0), shape = RoundedCornerShape(8.dp))
+                .background(DuskGray, shape = RoundedCornerShape(8.dp))
                 .padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
             Row(
@@ -152,7 +152,7 @@ fun MessageInputRow(
                         modifier = Modifier.padding(4.dp),
                         tint = Blue01,
                         imageVector = Icons.AutoMirrored.Filled.Send,
-                        contentDescription = "Send"
+                        contentDescription = null
                     )
                 }
             }

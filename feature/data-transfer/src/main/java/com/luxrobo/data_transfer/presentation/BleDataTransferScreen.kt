@@ -4,15 +4,12 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
@@ -20,7 +17,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -87,7 +83,7 @@ fun BleDataTransferScreen(
         }
     ) { paddingValues ->
 
-        if(configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             BleDataTransferPortraitContent(
                 modifier = Modifier
                     .padding(paddingValues),
@@ -147,14 +143,14 @@ fun BleDataTransferPortraitContent(
                     text = uiState.sendMessages
                 )
 
-                    VerticalSpacer(16.dp)
+                VerticalSpacer(16.dp)
 
-                    ScrollableReadOnlyTextField(
-                        modifier = Modifier
-                            .weight(1f),
-                        title = stringResource(R.string.receive_log),
-                        text = uiState.receiveMessages
-                    )
+                ScrollableReadOnlyTextField(
+                    modifier = Modifier
+                        .weight(1f),
+                    title = stringResource(R.string.receive_log),
+                    text = uiState.receiveMessages
+                )
             }
         }
     }

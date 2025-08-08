@@ -9,6 +9,10 @@
 
 ---
 
+https://github.com/user-attachments/assets/34cd0bc4-6570-49e0-87e9-f8a16b56aa5d
+
+---
+
 ## 개발 환경 및 빌드/실행 방법
 
 - **Android Studio**: Meerkat (2024.3.1) 이상  

@@ -37,7 +37,6 @@ fun BasicTopAppBar(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp)
                 .shadow(
                     elevation = 4.dp,
                     shape = RectangleShape,
@@ -45,7 +44,7 @@ fun BasicTopAppBar(
                 )
                 .background(containerColor)
                 .then(modifier)
-                .padding(vertical = 8.dp)
+                .padding(vertical = 16.dp, horizontal = 8.dp)
         ) {
             Row(Modifier.align(Alignment.CenterStart)) {
                 logoButtons()

@@ -1,21 +1,22 @@
-# BLE 시뮬레이터 앱
 
 ## 목차
-1. 
-2. [개발 환경 및 빌드/실행 방법](#앱-구조-및-상태-관리-설계)
-3. [Mock 데이터 및 연결 시뮬레이션 구현](#mock-데이터-및-연결-시뮬레이션-구현)
-   - [DeviceListActivity](#devicelistactivity)
-   - [DataTransferActivity](#datatransferactivity)
-4. [테스트 방법 및 커버리지](#테스트-방법-및-커버리지)
+1. [개발 환경 및 빌드/실행 방법](#개발-환경-및-빌드실행-방법)  
+2. [앱 구조 및 상태 관리 설계](#앱-구조-및-상태-관리-설계)  
+3. [Mock 데이터 및 연결 시뮬레이션 구현](#mock-데이터-및-연결-시뮬레이션-구현)  
+   - [DeviceListActivity](#devicelistactivity)  
+   - [DataTransferActivity](#datatransferactivity)  
+4. [테스트 방법 및 커버리지](#테스트-방법-및-커버리지)  
 
+---
 
-### 개발 환경
-- **Android Studio**: Meerkat (2024.3.1) 이상
-- **Android SDK**: API 35 (Android 15)
-- **Gradle**: 8.9.2 이상
+## 개발 환경 및 빌드/실행 방법
+
+- **Android Studio**: Meerkat (2024.3.1) 이상  
+- **Android SDK**: API 35 (Android 15)  
+- **Gradle**: 8.9.2 이상  
 - **Kotlin**: 2.1.21
 
-### 실행 및 Gradle 명령어
+### 주요 Gradle 명령어
 ```bash
 # 프로젝트 클린
 ./gradlew clean
@@ -58,17 +59,16 @@ ble_simulator/
 └── gradle/                       # Gradle 설정
 ```
 
+
+<img width="2529" height="1456" alt="module-dependencies" src="https://github.com/user-attachments/assets/7c2cb1ea-3ffe-4a5c-8623-9f14021c60aa" />
+
 ### Clean Architecture 패턴
 ```
-┌───────────────────────────────────┐
-│   Presentation Layer              │
-│   (Device List, Data Transfer)    │
-├───────────────────────────────────┤
-│   Domain Layer                    │
-│   (UseCase, Repository Interface) │
-├───────────────────────────────────┤
-│   Data Layer                      │
-│   (Repository, DataSource)        │
+Presentation Layer (UI, ViewModel)
+   ↓
+Domain Layer (UseCase, Repository Interface)
+   ↓
+Data Layer (Repository 구현, DataSource)
 ```
 
 ### 상태 관리 설계
@@ -111,6 +111,8 @@ ble_simulator/
 ---
 
 ## 테스트 방법 및 커버리지
+
+### 테스트 설명
 
 - **DataSource 단위 테스트**
    - Mock API를 통해 정상 데이터 수신 여부 테스트

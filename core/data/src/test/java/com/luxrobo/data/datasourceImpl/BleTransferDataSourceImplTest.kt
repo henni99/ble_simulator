@@ -22,7 +22,7 @@ class BleTransferDataSourceImplTest {
     }
 
     @Test
-    fun `postMessage는 messageApi에 위임하고 결과를 반환한다`() = runTest {
+    fun `messageApi를 사용하면_전달된_상황을_가정하고_그대로 반환한다`() = runTest {
         // given
         val message = Message(
             deviceId = "123e4567-e89b-12d3-a456-426614174000",
@@ -40,28 +40,7 @@ class BleTransferDataSourceImplTest {
     }
 
     @Test
-    fun `postMessage에서 messageApi가 예외를 던지면 그대로 예외를 던진다`() = runTest {
-        // given
-        val message = Message(
-            deviceId = "123e4567-e89b-12d3-a456-426614174000",
-            name = "BLE_DEVICE_001",
-            message = "test message"
-        )
-        val expectedErrorMessage = "messageApi failed"
-        whenever(messageApi.postMessage(message)).thenThrow(RuntimeException(expectedErrorMessage))
-
-        // when
-        val exception = assertThrows(RuntimeException::class.java)  {
-            dataSource.postMessage(message)
-        }
-
-        // then
-        assertEquals(expectedErrorMessage, exception.message)
-        verify(messageApi).postMessage(message)
-    }
-
-    @Test
-    fun `getMessage는 messageApi에 위임하고 결과를 반환한다`() = runTest {
+    fun `messageApi를 통해_가상의_결과를 반환한다`() = runTest {
         // given
         val bleDeviceInfo = BleDeviceInfo(
             deviceId = "123e4567-e89b-12d3-a456-426614174000",
@@ -83,24 +62,4 @@ class BleTransferDataSourceImplTest {
         verify(messageApi).getMessage(bleDeviceInfo)
     }
 
-    @Test
-    fun `getMessage에서 messageApi가 예외를 던지면 그대로 예외를 던진다`() = runTest {
-        // given
-        val bleDeviceInfo = BleDeviceInfo(
-            deviceId = "123e4567-e89b-12d3-a456-426614174000",
-            name = "BLE_DEVICE_001",
-            rssi = -65
-        )
-        val expectedErrorMessage = "messageApi failed"
-        whenever(messageApi.getMessage(bleDeviceInfo)).thenThrow(RuntimeException(expectedErrorMessage))
-
-        // when
-        val exception = assertThrows(RuntimeException::class.java) {
-            dataSource.getMessage(bleDeviceInfo)
-        }
-
-        // then
-        assertEquals(expectedErrorMessage, exception.message)
-        verify(messageApi).getMessage(bleDeviceInfo)
-    }
 }

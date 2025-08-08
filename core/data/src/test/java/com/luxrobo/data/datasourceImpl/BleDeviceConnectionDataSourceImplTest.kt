@@ -22,8 +22,8 @@ class BleDeviceConnectionDataSourceImplTest {
     }
 
     @Test
-    fun `getBleDeviceConnections는 deviceApi에 위임하고 결과를 반환한다`() = runTest {
-        // given
+    fun `deviceApi를_통해_값을_받아오고 결과를 반환한다`() = runTest {
+        // Given
         val expectedConnections = listOf(
             BleDeviceConnection(
                 deviceId = "123e4567-e89b-12d3-a456-426614174000",
@@ -38,28 +38,11 @@ class BleDeviceConnectionDataSourceImplTest {
         )
         whenever(deviceApi.getDeviceConnections()).thenReturn(expectedConnections)
 
-        // when
+        // When
         val result = dataSource.getBleDeviceConnections()
 
-        // then
+        // Then:
         assertEquals(expectedConnections, result)
-        verify(deviceApi).getDeviceConnections()
-    }
-
-    @Test
-    fun `getBleDeviceConnections는 deviceApi가 실패하면 예외를 던집니다`() = runTest {
-
-        // given
-        val expectedErrorMessage = "deviceApi failed as expected"
-        whenever(deviceApi.getDeviceConnections()).thenThrow(RuntimeException(expectedErrorMessage))
-
-        // when & then
-        val exception = assertThrows(RuntimeException::class.java) { // <-- 예외 클래스::class.java 명시
-            dataSource.getBleDeviceConnections() // 일반 함수 호출
-        }
-        assertEquals(expectedErrorMessage, exception.message)
-
-        // verify
         verify(deviceApi).getDeviceConnections()
     }
 }

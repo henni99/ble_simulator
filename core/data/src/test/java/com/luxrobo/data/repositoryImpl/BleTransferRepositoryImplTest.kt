@@ -26,7 +26,8 @@ class BleTransferRepositoryImplTest {
     }
 
     @Test
-    fun `postMessage는 데이터 소스에 위임하고 단일 메시지를 emit 한다`() = runTest {
+    fun `postMessage를 통해 단일 메시지 가져오고 flow에 emit 한다`() = runTest {
+        // given
         val message =  Message(
             deviceId = "123e4567-e89b-12d3-a456-426614174000",
             name = "BLE_DEVICE_001",
@@ -34,6 +35,7 @@ class BleTransferRepositoryImplTest {
         )
         whenever(dataSource.postMessage(message)).thenReturn(message)
 
+        // when & then
         repository.postMessage(message).test {
             val emitted = awaitItem()
             assertEquals(message, emitted)
@@ -44,7 +46,8 @@ class BleTransferRepositoryImplTest {
     }
 
     @Test
-    fun `getMessage는 데이터 소스에 위임하고 주기적으로 메시지를 emit 한다`() = runTest {
+    fun `getMessage는 가상의 메시지를 주기적(1초)으로 받아와 emit 한다`() = runTest {
+        // given
         val bleDeviceInfo = BleDeviceInfo(
             deviceId = "123e4567-e89b-12d3-a456-426614174000",
             name = "BLE_DEVICE_001",
@@ -58,6 +61,7 @@ class BleTransferRepositoryImplTest {
 
         whenever(dataSource.getMessage(bleDeviceInfo)).thenReturn(message)
 
+        // when & then
         repository.getMessage(bleDeviceInfo).test {
             val emitted1 = awaitItem()
             assertEquals(message, emitted1)

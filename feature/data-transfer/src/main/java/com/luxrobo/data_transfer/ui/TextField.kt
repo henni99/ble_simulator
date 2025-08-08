@@ -111,6 +111,9 @@ fun MessageInputRow(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BasicTextField(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(end = 8.dp),
                     value = text,
                     onValueChange = onTextChange,
                     singleLine = true,
@@ -130,15 +133,11 @@ fun MessageInputRow(
                                 focusManager.clearFocus(force = true)
                             }
                         }
-                    ),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 8.dp)
-
+                    )
                 )
 
                 IconButton(
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(24.dp),
                     onClick = {
                         if (text.isNotBlank()) {
                             onSend(text)
@@ -149,6 +148,7 @@ fun MessageInputRow(
                     }
                 ) {
                     Icon(
+                        modifier = Modifier.padding(4.dp),
                         tint = Blue01,
                         imageVector = Icons.AutoMirrored.Filled.Send,
                         contentDescription = "Send"

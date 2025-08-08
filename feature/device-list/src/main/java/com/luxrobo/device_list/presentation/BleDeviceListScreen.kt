@@ -96,7 +96,6 @@ fun BleDeviceListScreen(
                     .padding(8.dp),
                 text = "스캔 시작",
                 onClick = {
-                    println("uiState: ${uiState.isScanning}")
                     handleIntent(BleDeviceListIntent.ChangeScanState)
                 }
             )
@@ -114,7 +113,8 @@ fun BleDeviceListScreen(
             ModalBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .navigationBarsPadding(),
+                    .navigationBarsPadding()
+                    .testTag("탐색 모달"),
                 dragHandle = null,
                 onDismissRequest = { handleIntent(BleDeviceListIntent.ChangeScanState) },
                 sheetState = sheetState,
@@ -126,7 +126,7 @@ fun BleDeviceListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(300.dp)
-                        .padding(16.dp)
+                        .padding(8.dp)
                 ) {
 
                     Box(

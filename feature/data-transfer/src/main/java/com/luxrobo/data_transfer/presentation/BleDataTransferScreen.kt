@@ -239,8 +239,7 @@ fun DeviceInfoContent(
 
         Text(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 4.dp),
+                .fillMaxWidth(),
             color = Color.DarkGray,
             text = uiState.deviceInfo?.name.toString(),
             style = LuxTheme.typography.bodyLargeR
@@ -250,8 +249,7 @@ fun DeviceInfoContent(
 
         Text(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 4.dp),
+                .fillMaxWidth(),
             text = uiState.deviceInfo?.deviceId.toString(),
             color = Color.DarkGray,
             style = LuxTheme.typography.bodyLargeR

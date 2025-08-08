@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.luxrobo.designsystem.theme.LuxTheme
@@ -28,39 +29,38 @@ import com.luxrobo.designsystem.theme.LuxTheme
 fun BasicTopAppBar(
     @StringRes titleRes: Int,
     modifier: Modifier = Modifier,
-    contentColor: Color = MaterialTheme.colorScheme.onSurface,
     containerColor: Color = Color.White,
     actionButtons: @Composable () -> Unit = {},
     logoButtons: @Composable () -> Unit = {}
 ) {
-    CompositionLocalProvider(LocalContentColor provides contentColor) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .shadow(
-                    elevation = 4.dp,
-                    shape = RectangleShape,
-                    clip = false
-                )
-                .background(containerColor)
-                .then(modifier)
-                .padding(vertical = 16.dp, horizontal = 8.dp)
-        ) {
-            Row(Modifier.align(Alignment.CenterStart)) {
-                logoButtons()
-            }
-
-            Row(Modifier.align(Alignment.CenterEnd)) {
-                actionButtons()
-            }
-
-            Text(
-                text = stringResource(id = titleRes),
-                fontWeight = FontWeight.Bold,
-                style = LuxTheme.typography.titleLargeB,
-                modifier = Modifier.align(Alignment.Center)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(
+                elevation = 4.dp,
+                shape = RectangleShape,
+                clip = false
             )
+            .background(containerColor)
+            .then(modifier)
+            .padding(vertical = 16.dp, horizontal = 12.dp)
+    ) {
+        Row(Modifier.align(Alignment.CenterStart)) {
+            logoButtons()
         }
+
+        Row(Modifier.align(Alignment.CenterEnd)) {
+            actionButtons()
+        }
+
+        Text(
+            text = stringResource(id = titleRes),
+            style = LuxTheme.typography.titleLargeB,
+            maxLines = 1,
+            minLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.align(Alignment.Center)
+        )
     }
 }
 

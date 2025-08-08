@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInteropFilter
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -73,8 +74,10 @@ fun SpringyButton(
         onClick = {}
     ) {
         Text(
-            style = LuxTheme.typography.titleLargeB,
-            modifier = Modifier.padding(vertical = 8.dp),
+            style = LuxTheme.typography.bodyLargeR,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(vertical = 4.dp),
             text = text,
         )
     }

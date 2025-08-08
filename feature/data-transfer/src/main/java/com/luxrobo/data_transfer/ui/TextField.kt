@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import com.luxrobo.designsystem.component.VerticalSpacer
 import com.luxrobo.designsystem.theme.LuxColor.Blue01
 import com.luxrobo.designsystem.theme.LuxTheme
+import com.luxrobo.designsystem.theme.LuxTypography
 
 @Composable
 fun ScrollableReadOnlyTextField(
@@ -76,7 +77,7 @@ fun ScrollableReadOnlyTextField(
             value = text,
             onValueChange = {},
             readOnly = true,
-            textStyle = LocalTextStyle.current.copy(color = Color.Black)
+            textStyle = LuxTheme.typography.bodyMediumR.copy(color = Color.Black)
         )
     }
 

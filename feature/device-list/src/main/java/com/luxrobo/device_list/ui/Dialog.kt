@@ -57,8 +57,7 @@ fun BasicDialog(
                 Text(
                     text = isDialogTitle,
                     textAlign = TextAlign.Center,
-                    fontSize = 18.sp,
-                    style = LuxTheme.typography.titleLargeB,
+                    style = LuxTheme.typography.bodyLargeR,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
 

@@ -81,8 +81,6 @@ private val LightColorScheme = lightColorScheme(
     surfaceContainerLowest = LuxColor.PaleGray,
 )
 
-val LocalDarkTheme = compositionLocalOf { true }
-
 @Composable
 fun LuxTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -100,24 +98,14 @@ fun LuxTheme(
         }
     }
 
-    CompositionLocalProvider(
-        LocalDarkTheme provides darkTheme,
-        LocalTypography provides Typography,
-        LocalShape provides LuxShape(),
-    ) {
-        MaterialTheme(
-            colorScheme = colorScheme,
-            content = content,
-        )
-    }
+    MaterialTheme(
+        colorScheme = colorScheme,
+        content = content,
+    )
 }
 
 object LuxTheme {
     val typography: LuxTypography
         @Composable
         get() = LocalTypography.current
-
-    val shape: LuxShape
-        @Composable
-        get() = LocalShape.current
 }

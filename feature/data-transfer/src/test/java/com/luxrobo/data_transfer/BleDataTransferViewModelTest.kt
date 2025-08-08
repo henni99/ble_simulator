@@ -72,7 +72,7 @@ class BleDataTransferViewModelTest {
     // --- uiState Tests ---
 
     @Test
-    fun `uiState는_SavedStateHandle에_deviceInfo가_없으면_비어있어야함`() = runTest {
+    fun `uiState should be empty if no deviceInfo in SavedStateHandle`() = runTest {
         // Simulate no device info in SavedStateHandle
         every {
             savedStateHandle.getStateFlow<ParcelableBleDeviceInfo?>(
@@ -99,7 +99,7 @@ class BleDataTransferViewModelTest {
 
     // --- postMessage Tests ---
     @Test
-    fun `postMessage는_메시지를_sendMessages에_추가하고_uiState를_업데이트해야함`() = runTest {
+    fun `postMessage should add message to sendMessages and update uiState`() = runTest {
         val testMsgContent = "test post message"
         coEvery { postMessageUseCase.invoke(testPostMessage) } returns flowOf(testPostMessage)
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } answers { flowOf(testGetMessage) }
@@ -116,7 +116,7 @@ class BleDataTransferViewModelTest {
     }
 
     @Test
-    fun `postMessage는_sendMessages에서_여러_메시지를_처리해야함`() = runTest {
+    fun `postMessage should handle multiple messages in sendMessages`() = runTest {
         val testMsgContent = "test post message"
         coEvery { postMessageUseCase.invoke(testPostMessage) } returns flowOf(testPostMessage)
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } answers { flowOf(testGetMessage) }
@@ -143,7 +143,7 @@ class BleDataTransferViewModelTest {
     // --- _receiveMessages and getMessageUseCase Tests ---
 
     @Test
-    fun `receiveMessages는_getMessageUseCase가_발행할때_uiState를_업데이트해야함`() = runTest {
+    fun `receiveMessages should update uiState when getMessageUseCase emits`() = runTest {
         val testGetContent = "test get message"
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } returns flow {
             while (true) {
@@ -169,7 +169,7 @@ class BleDataTransferViewModelTest {
     // --- disconnect Tests ---
 
     @Test
-    fun `handleIntent_Disconnect는_disconnect를_호출해야함`() = runTest {
+    fun `handleIntent Disconnect should call disconnect`() = runTest {
         coEvery { postMessageUseCase.invoke(testPostMessage) } answers { flowOf(testPostMessage) }
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } answers { flowOf(testGetMessage) }
 
@@ -183,7 +183,7 @@ class BleDataTransferViewModelTest {
     }
 
     @Test
-    fun `handleIntent_PostMessage는_postMessage를_호출하고_uiState를_업데이트해야함`() = runTest {
+    fun `handleIntent PostMessage should call postMessage and update uiState`() = runTest {
         coEvery { postMessageUseCase.invoke(testPostMessage) } answers { flowOf(testPostMessage) }
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } answers { flowOf(testGetMessage) }
 
@@ -205,7 +205,7 @@ class BleDataTransferViewModelTest {
     // --- postSideEffect Tests ---
 
     @Test
-    fun `postSideEffect는_주어진_효과를_전송해야함`() = runTest {
+    fun `postSideEffect should send the given effect`() = runTest {
         coEvery { postMessageUseCase.invoke(testPostMessage) } answers { flowOf(testPostMessage) }
         coEvery { getMessageUseCase.invoke(testOriginDeviceInfo) } answers { flowOf(testGetMessage) }
 

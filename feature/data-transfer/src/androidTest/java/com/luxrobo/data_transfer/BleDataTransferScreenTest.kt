@@ -28,7 +28,7 @@ class BleDataTransferScreenTest {
     }
 
     @Test
-    fun `BleDataTransferScreen_초기상태_올바르게표시됨`() {
+    fun `BleDataTransferScreen_initialState_displaysCorrectly`() {
         fakeUiState.value = BleDataTransferUiState(
             deviceInfo = BleDeviceInfo(
                 deviceId = "123e4567-e89b-12d3-a456-426614174000",

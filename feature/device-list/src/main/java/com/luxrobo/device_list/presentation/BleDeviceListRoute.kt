@@ -23,8 +23,6 @@ import com.luxrobo.device_list.viewModel.BleDeviceListViewModel
 fun BleDeviceListRoute(
     viewModel: BleDeviceListViewModel = hiltViewModel()
 ) {
-
-
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -51,22 +49,17 @@ fun BleDeviceListRoute(
                 when (sideEffect) {
 
                     is BleDeviceListSideEffect.MoveToDetail -> {
-
                         val intent = Intent(context, BleDataTransferActivity::class.java)
                         intent.putExtra("deviceInfo", sideEffect.deviceInfo.toParcelize())
                         context.startActivity(intent)
                     }
                 }
             }
-
         }
     }
-
 
     BleDeviceListScreen(
         uiState = uiState,
         handleIntent = viewModel::handleIntent
     )
-
-
 }

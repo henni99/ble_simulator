@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.luxrobo.ble_simulator.feature.device_list.R
 import com.luxrobo.designsystem.theme.LuxColor.Blue01
@@ -43,7 +42,7 @@ fun BasicDialog(
             modifier = Modifier
                 .fillMaxWidth(0.9f)
                 .wrapContentHeight()
-                .testTag("Dialog")
+                .testTag(stringResource(R.string.test_tag_dialog))
                 .background(
                     color = Color.White,
                     shape = RoundedCornerShape(16.dp)

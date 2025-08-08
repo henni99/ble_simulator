@@ -1,6 +1,6 @@
 package com.luxrobo.virtual_api
 
-import com.luxrobo.ble_simulator.core.virtual.api.R
+import com.luxrobo.mapper.getConnectionQuality
 import com.luxrobo.model.BleDeviceInfo
 import com.luxrobo.model.Message
 import javax.inject.Inject
@@ -48,25 +48,6 @@ class MessageApi @Inject constructor() {
                     "random: " + generateRandomString(10) + "\n"
         )
     }
-}
-
-/**
- * getConnectionQuality
- *
- * RSSI 값을 받아 연결 품질 상태 문자열 리소스 ID를 문자열로 변환하여 반환 (현재는 단순 toString 호출).
- *
- * @param rssi RSSI 신호 세기 값
- * @return 연결 품질 상태 문자열 (리소스 ID의 문자열 표현)
- */
-
-internal fun getConnectionQuality(rssi: Long): String {
-    return when {
-        rssi > -60 -> R.string.connection_quality_excellent
-        rssi in -70 until -60 -> R.string.connection_quality_good
-        rssi in -80 until -70 -> R.string.connection_quality_fair
-        rssi <= -80 -> R.string.connection_quality_poor
-        else -> R.string.connection_quality_unknown
-    }.toString()
 }
 
 /**

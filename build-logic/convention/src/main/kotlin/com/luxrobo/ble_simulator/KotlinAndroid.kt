@@ -57,6 +57,13 @@ internal fun Project.configureKotlinAndroid() {
         buildFeatures {
             buildConfig = false
         }
+        
+        packaging {
+            resources {
+                excludes += "META-INF/LICENSE.md"
+                excludes += "META-INF/LICENSE-notice.md"
+            }
+        }
     }
 
     configureKotlin<KotlinAndroidProjectExtension>()

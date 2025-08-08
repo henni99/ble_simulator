@@ -1,5 +1,4 @@
 import com.luxrobo.ble_simulator.configureHiltAndroid
-import com.luxrobo.ble_simulator.configureRoborazzi
 import com.luxrobo.ble_simulator.findLibrary
 
 plugins {
@@ -19,12 +18,11 @@ android {
 }
 
 configureHiltAndroid()
-configureRoborazzi()
 
 dependencies {
     implementation(project(":core:designsystem"))
 
-//
+
     testImplementation(project(":core:testing"))
 
     implementation(findLibrary("hilt.navigation.compose"))

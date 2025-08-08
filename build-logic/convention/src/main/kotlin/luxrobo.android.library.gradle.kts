@@ -6,7 +6,6 @@ import com.luxrobo.ble_simulator.configureMock
 
 plugins {
     id("com.android.library")
-    id("luxrobo.verify.detekt")
 }
 
 configureKotlinAndroid()

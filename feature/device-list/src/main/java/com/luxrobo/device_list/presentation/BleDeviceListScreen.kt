@@ -63,7 +63,7 @@ fun BleDeviceListScreen(
     handleIntent: (BleDeviceListIntent) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true // 완전히 열거나 닫기만
+        skipPartiallyExpanded = true
     )
 
     var countdown by rememberSaveable { mutableIntStateOf(5) }
@@ -94,7 +94,7 @@ fun BleDeviceListScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                text = "스캔 시작",
+                text = stringResource(R.string.scan_start),
                 onClick = {
                     handleIntent(BleDeviceListIntent.ChangeScanState)
                 }
@@ -107,14 +107,11 @@ fun BleDeviceListScreen(
             handleIntent = handleIntent
         )
 
-
-
         if (uiState.isScanning) {
             ModalBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .navigationBarsPadding()
-                    .testTag("탐색 모달"),
+                    .navigationBarsPadding(),
                 dragHandle = null,
                 onDismissRequest = { handleIntent(BleDeviceListIntent.ChangeScanState) },
                 sheetState = sheetState,
@@ -155,7 +152,7 @@ fun BleDeviceListScreen(
 
                     ScanningRippleEffect(
                         modifier = Modifier
-                            .testTag("스캔 애니메이션")
+                            .testTag(stringResource(R.string.test_tag_scan_animation))
                             .size(180.dp)
                             .align(Alignment.Center)
                     )
@@ -206,7 +203,7 @@ fun BleDeviceListContent(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .testTag("로딩"),
+                .testTag(stringResource(R.string.test_tag_loading)),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator(

@@ -3,10 +3,12 @@ package com.luxrobo.device_list.viewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.luxrobo.domain.usecase.GetBleDeviceConnectionsUseCase
+import com.luxrobo.mapper.getConnectionQuality
 import com.luxrobo.mapper.toBleDeviceInfo
 import com.luxrobo.model.BleDeviceConnection
 import com.luxrobo.model.BleDeviceInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BleDeviceListViewModel @Inject constructor(
-    private val getBleDeviceConnectionsUseCase: GetBleDeviceConnectionsUseCase
+    getBleDeviceConnectionsUseCase: GetBleDeviceConnectionsUseCase
 ): ViewModel() {
 
     private val _sideEffect = Channel<BleDeviceListSideEffect>()
@@ -36,17 +38,6 @@ class BleDeviceListViewModel @Inject constructor(
     private val _isScanning = MutableStateFlow<Boolean>(true)
 
     private val _isDialogShowed = MutableStateFlow<Pair<Boolean, String>>(Pair(false, ""))
-
-    fun controlledBleDeviceFlow(): Flow<List<BleDeviceConnection>> {
-        return _isScanning
-            .flatMapLatest { isEnabled ->
-                if (isEnabled) {
-                    getBleDeviceConnectionsUseCase()
-                } else {
-                    flowOf(emptyList())
-                }
-            }
-    }
 
     val uiState: StateFlow<BleDeviceListUiState> =
         combine(
@@ -65,39 +56,37 @@ class BleDeviceListViewModel @Inject constructor(
                 isScanning = isScanning,
                 isDialogShowed = isDialogShowed
             )
-        }.catch { throwable ->
-            _isDialogShowed.update { Pair(true, "문제가 발생했습니다") }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = BleDeviceListUiState.empty(),
         )
 
-    fun selectDevice(deviceConnection: BleDeviceConnection) = viewModelScope.launch {
+    fun selectDevice(deviceConnection: BleDeviceConnection) = viewModelScope.launch(Dispatchers.IO) {
 
-        if (deviceConnection.rssi >= -70) {
+        if (deviceConnection.rssi >= CONNECTION_PIVOT_VALUE) {
             _selectedDeviceId.update { deviceConnection.deviceId }
-            delay(1000L)
+            delay(1000L) // 의도적 연결 시간 1초
             postSideEffect(BleDeviceListSideEffect.MoveToDetail(deviceConnection.toBleDeviceInfo()))
         } else {
             _isDialogShowed.update { Pair(true, getConnectionQuality(deviceConnection.rssi)) }
         }
     }
 
-    fun dismissDialog() = viewModelScope.launch {
+    fun dismissDialog() = viewModelScope.launch(Dispatchers.IO) {
         _isDialogShowed.update { Pair(false, "") }
     }
 
-    fun resetSelection() = viewModelScope.launch {
+    fun resetSelection() = viewModelScope.launch(Dispatchers.IO) {
         _selectedDeviceId.update { null }
     }
 
-    fun changeScanState() = viewModelScope.launch {
+    fun changeScanState() = viewModelScope.launch(Dispatchers.IO) {
         _isScanning.update { !_isScanning.value }
     }
 
     fun postSideEffect(effect: BleDeviceListSideEffect) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _sideEffect.send(effect)
         }
     }
@@ -121,14 +110,8 @@ class BleDeviceListViewModel @Inject constructor(
             }
         }
     }
-}
 
-fun getConnectionQuality(rssi: Long): String {
-    return when {
-        rssi > -60 -> "매우 안정적인 연결"
-        rssi in -70 until -60 -> "안정적인 연결"
-        rssi in -80 until -70 -> "연결 가능하지만 불안정, 끊김 가능성 있음"
-        rssi <= -80 -> "매우 불안정, 연결 실패 또는 자주 끊김"
-        else -> "알 수 없음"
+    companion object {
+        const val CONNECTION_PIVOT_VALUE = -75
     }
 }

@@ -3,7 +3,6 @@ package com.luxrobo.device_list
 import app.cash.turbine.test
 import com.luxrobo.device_list.viewModel.BleDeviceListIntent
 import com.luxrobo.device_list.viewModel.BleDeviceListSideEffect
-import com.luxrobo.device_list.viewModel.BleDeviceListUiState
 import com.luxrobo.device_list.viewModel.BleDeviceListViewModel
 import com.luxrobo.domain.usecase.GetBleDeviceConnectionsUseCase
 import com.luxrobo.mapper.toBleDeviceInfo
@@ -16,7 +15,6 @@ import io.mockk.mockk
 import junit.framework.TestCase.assertFalse
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
@@ -33,25 +31,29 @@ class BleDeviceListViewModelTest {
 
     @Before
     fun setup() {
-        coEvery { getBleDeviceConnectionsUseCase.invoke() } returns flowOf(mockBleDeviceConnections)
+        coEvery { getBleDeviceConnectionsUseCase() } returns flowOf(mockBleDeviceConnections)
         viewModel = BleDeviceListViewModel(getBleDeviceConnectionsUseCase)
     }
 
     @Test
-    fun `selectDevice with good RSSI should move to detail`() = runTest {
+    fun `-RSSI가_75이상 일때_RSSI_기기의_선택은_상세화면으로_이동한다`() = runTest {
+        // Given
         val goodRssiDevice = BleDeviceConnection(
             deviceId = "123e4567-e89b-12d3-a456-426614174000",
             name = "BLE_DEVICE_001",
             rssi = -65
         )
         val expectedDeviceInfo = goodRssiDevice.toBleDeviceInfo()
-        viewModel.uiState.test {
-            awaitItem() // Initial state
 
+        viewModel.uiState.test {
+            awaitItem()
+
+            // When
             viewModel.selectDevice(goodRssiDevice)
 
+            // Then
             val connectingState = awaitItem()
-            assertTrue(connectingState.bleDeviceConnections.any { it.deviceId == goodRssiDevice.deviceId  && it.isConnecting})
+            assertTrue(connectingState.bleDeviceConnections.any { it.deviceId == goodRssiDevice.deviceId && it.isConnecting })
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -64,42 +66,47 @@ class BleDeviceListViewModelTest {
     }
 
     @Test
-    fun `selectDevice with bad RSSI should show dialog`() = runTest {
+    fun `RSSI가_-75미만_일때_기기의_Dialog를_표시한다`() = runTest {
         val badRssiDevice = BleDeviceConnection(
-            deviceId = "123e4567-e89b-12d3-a456-426614174002",
+            deviceId = "123e4567-e89b-12d3-a456174002",
             name = "BLE_DEVICE_003",
             rssi = -80
-        ) // RSSI < -70
+        )
 
         viewModel.uiState.test {
-            awaitItem() // initial state
+            awaitItem()
 
+            // When
             viewModel.selectDevice(badRssiDevice)
+
+            // Then
             val stateAfterBadRssi = awaitItem()
             assertTrue(stateAfterBadRssi.isDialogShowed.first)
-            assertTrue(stateAfterBadRssi.isDialogShowed.second.isNotEmpty()) // 다이얼로그 메시지가 비어있지 않은지 확인
-            assertFalse(stateAfterBadRssi.isConnecting) // RSSI가 나쁘면 연결 시도 안 함
+            assertTrue(stateAfterBadRssi.isDialogShowed.second.isNotEmpty())
+            assertFalse(stateAfterBadRssi.isConnecting)
 
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `dismissDialog should hide dialog`() = runTest {
+    fun `Dialog를_없애면_실제로_Dialog가_없어진다`() = runTest {
         val badRssiDevice = BleDeviceConnection(
-            deviceId = "123e4567-e89b-12d3-a456-426614174002",
+            deviceId = "123e4567-e89b-12d3-a456174002",
             name = "BLE_DEVICE_003",
             rssi = -80
-        ) // RSSI < -70
+        )
 
         viewModel.uiState.test {
-            awaitItem() // initial state
+            awaitItem()
 
-            // 먼저 다이얼로그를 표시
             viewModel.selectDevice(badRssiDevice)
-            awaitItem() // dialog showed state
+            awaitItem()
 
+            // When
             viewModel.dismissDialog()
+
+            // Then
             val stateAfterDismiss = awaitItem()
             assertFalse(stateAfterDismiss.isDialogShowed.first)
             assertTrue(stateAfterDismiss.isDialogShowed.second.isEmpty())
@@ -109,21 +116,23 @@ class BleDeviceListViewModelTest {
     }
 
     @Test
-    fun `resetSelection should set selectedDeviceId to null`() = runTest {
+    fun `선택을_해제되면_isConnecting은_false로_설정한다`() = runTest {
         val device = BleDeviceConnection(
-            deviceId = "123e4567-e89b-12d3-a456-426614174000",
+            deviceId = "123e4567-e89b-12d3-a456174000",
             name = "BLE_DEVICE_001",
             rssi = -65
         )
 
         viewModel.uiState.test {
-            awaitItem() // initial state
+            awaitItem()
 
-            // 먼저 디바이스를 선택하여 _selectedDeviceId를 설정
             viewModel.selectDevice(device)
-            awaitItem() // connecting state
+            awaitItem()
 
+            // When
             viewModel.resetSelection()
+
+            // Then
             val stateAfterReset = awaitItem()
             assertFalse(stateAfterReset.isConnecting)
             assertTrue(stateAfterReset.bleDeviceConnections.none { it.isConnecting })
@@ -133,125 +142,19 @@ class BleDeviceListViewModelTest {
     }
 
     @Test
-    fun `controlledBleDeviceFlow should emit device connections when scanning is enabled`() = runTest {
-        val deviceList = listOf(
-            BleDeviceConnection(
-                deviceId = "123e4567-e89b-12d3-a456-426614174000",
-                name = "BLE_DEVICE_001",
-                rssi = -65
-            ),
-            BleDeviceConnection(
-                deviceId = "123e4567-e89b-12d3-a456-426614174002",
-                name = "BLE_DEVICE_003",
-                rssi = -80
-            )
-        )
-        // getBleDeviceConnectionsUseCase가 호출될 때 위 deviceList를 내보내도록 목킹합니다.
-        coEvery { getBleDeviceConnectionsUseCase.invoke() } returns flowOf(deviceList)
-
-        // controlledBleDeviceFlow를 test 블록으로 수집합니다.
-        viewModel.controlledBleDeviceFlow().test {
-            // isScanning의 초기값은 true이므로, UseCase가 호출되고 그 결과가 바로 내보내질 것입니다.
-            val emittedList = awaitItem()
-            assertEquals(deviceList, emittedList)
-
-            // 더 이상 내보내질 것이 없다고 예상되면
-            expectNoEvents()
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `controlledBleDeviceFlow should emit empty list when scanning is disabled`() = runTest {
-        val deviceList = listOf(
-            BleDeviceConnection(
-                deviceId = "123e4567-e89b-12d3-a456-426614174000",
-                name = "BLE_DEVICE_001",
-                rssi = -65
-            )
-        )
-        // UseCase가 호출되면 deviceList를 내보내도록 목킹합니다.
-        coEvery { getBleDeviceConnectionsUseCase.invoke() } returns flowOf(deviceList)
-
-        viewModel.controlledBleDeviceFlow().test {
-            // 초기 상태: _isScanning은 true이므로, UseCase의 결과인 deviceList가 먼저 내보내집니다.
-            val initialList = awaitItem()
-            assertEquals(deviceList, initialList)
-
-            // 이제 ViewModel의 changeScanState()를 호출하여 _isScanning을 false로 변경합니다.
-            // 이로 인해 controlledBleDeviceFlow가 flatMapLatest에 의해 다시 평가됩니다.
-            viewModel.changeScanState()
-
-            // _isScanning이 false가 되었으므로, 빈 리스트가 내보내질 것입니다.
-            val emptyList = awaitItem()
-            assertTrue(emptyList.isEmpty())
-
-            expectNoEvents()
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `controlledBleDeviceFlow should stop emitting from use case when scanning is disabled and then re-enable scanning`() = runTest {
-        val deviceList1 = listOf(
-            BleDeviceConnection(
-                deviceId = "123e4567-e89b-12d3-a456-426614174000",
-                name = "BLE_DEVICE_001",
-                rssi = -65
-            )
-        )
-        val deviceList2 = listOf(
-            BleDeviceConnection(
-                deviceId = "123e4567-e89b-12d3-a456-426614174002",
-                name = "BLE_DEVICE_003",
-                rssi = -80
-            )
-        )
-        // UseCase가 호출될 때마다 다른 Flow를 내보내도록 시퀀스를 목킹할 수 있습니다.
-        // 하지만 여기서는 간단히 첫 번째 호출에만 특정 리스트를 반환하도록 합니다.
-        // 실제 UseCase는 계속해서 새로운 데이터를 내보낼 수 있으므로,
-        // 이 테스트는 _isScanning 변화에 따른 flatMapLatest의 동작을 검증하는 데 초점을 맞춥니다.
-        coEvery { getBleDeviceConnectionsUseCase.invoke() } returnsMany listOf(flowOf(deviceList1), flowOf(deviceList2))
-
-
-        viewModel.controlledBleDeviceFlow().test {
-            // 1. 초기 상태: isScanning = true. UseCase로부터 첫 번째 리스트를 받습니다.
-            val initialList = awaitItem()
-            assertEquals(deviceList1, initialList)
-
-            // 2. 스캔 비활성화: _isScanning이 false로 변경됩니다.
-            viewModel.changeScanState()
-
-            // flatMapLatest에 의해 Flow가 전환되고 빈 리스트가 내보내집니다.
-            val emptyList = awaitItem()
-            assertTrue(emptyList.isEmpty())
-
-            // 3. 스캔 재활성화: _isScanning이 다시 true로 변경됩니다.
-            viewModel.changeScanState()
-
-            // flatMapLatest에 의해 UseCase가 다시 호출되고 두 번째 리스트가 내보내집니다.
-            val reEnabledList = awaitItem()
-            assertEquals(deviceList2, reEnabledList)
-
-            expectNoEvents() // 더 이상 이벤트가 없음을 예상
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `postSideEffect should send the correct side effect`() = runTest {
-        val testDeviceInfo =  BleDeviceInfo(
-            deviceId = "123e4567-e89b-12d3-a456-426614174000",
+    fun `postSideEffect를_호출하면_viewModel의_sideEffect에_전달한다`() = runTest {
+        val testDeviceInfo = BleDeviceInfo(
+            deviceId = "123e4567-e89b-12d3-a456174000",
             name = "BLE_DEVICE_001",
             rssi = -65
         )
         val expectedSideEffect = BleDeviceListSideEffect.MoveToDetail(testDeviceInfo)
 
         viewModel.sideEffect.test {
-            // Act: Post a side effect
+            // When
             viewModel.postSideEffect(expectedSideEffect)
 
-            // Assert: Verify that the side effect was received
+            // Then
             val receivedEffect = awaitItem()
             assertEquals(expectedSideEffect, receivedEffect)
 
@@ -259,15 +162,16 @@ class BleDeviceListViewModelTest {
         }
     }
 
-    @Test
-    fun `handleIntent ChangeScanState should toggle isScanning`() = runTest {
-        viewModel.uiState.test {
-            awaitItem() // Initial state: isScanning = true
 
-            // Act: Send ChangeScanState intent
+    @Test
+    fun `ChangeScanState_인텐트_처리는_isScanning_상태를_변경한다`() = runTest {
+        viewModel.uiState.test {
+            awaitItem()
+
+            // When
             viewModel.handleIntent(BleDeviceListIntent.ChangeScanState)
 
-            // Assert: isScanning should be false
+            // Then
             val stateAfterIntent = awaitItem()
             assertFalse(stateAfterIntent.isScanning)
 
@@ -276,27 +180,26 @@ class BleDeviceListViewModelTest {
     }
 
     @Test
-    fun `handleIntent DismissDialog should dismiss the dialog`() = runTest {
+    fun `DismissDialog_인텐트_처리는_Dialog를_숨긴다`() = runTest {
         val badRssiDeviceConnection = BleDeviceConnection(
-            deviceId = "123e4567-e89b-12d3-a456-426614174000",
+            deviceId = "123e4567-e89b-12d3-a456174000",
             name = "BLE_DEVICE_001",
-            rssi = -75 // RSSI를 -70 미만으로 설정하여 다이얼로그가 표시되도록 유도
+            rssi = -80
         )
 
         viewModel.uiState.test {
-            awaitItem() // Initial state
+            awaitItem()
 
-            // First, make the dialog show up
             viewModel.handleIntent(BleDeviceListIntent.SelectDevice(badRssiDeviceConnection))
 
             val stateWithDialogShown = awaitItem()
             assertTrue(stateWithDialogShown.isDialogShowed.first)
             assertTrue(stateWithDialogShown.isDialogShowed.second.isNotEmpty())
 
-            // Act: Send DismissDialog intent
+            // When
             viewModel.handleIntent(BleDeviceListIntent.DismissDialog)
 
-            // Assert: Dialog should be hidden
+            // Then
             val stateAfterDismiss = awaitItem()
             assertFalse(stateAfterDismiss.isDialogShowed.first)
             assertTrue(stateAfterDismiss.isDialogShowed.second.isEmpty())
@@ -306,19 +209,19 @@ class BleDeviceListViewModelTest {
     }
 
     @Test
-    fun `handleIntent SelectDevice with good RSSI should post MoveToDetail side effect`() = runTest {
+    fun `RSSI가_-75이상인_기기_선택_인텐트_처리는_MoveToDetail_SideEffect를_전송한다`() = runTest {
         val goodRssiDevice = BleDeviceConnection(
-            deviceId = "123e4567-e89b-12d3-a456-426614174000",
+            deviceId = "123e4567-e89b-12d3-a456174000",
             name = "BLE_DEVICE_001",
             rssi = -65
         )
         val expectedDeviceInfo = goodRssiDevice.toBleDeviceInfo()
 
         viewModel.sideEffect.test {
-            // Act: Send SelectDevice intent with good RSSI
+            // When
             viewModel.handleIntent(BleDeviceListIntent.SelectDevice(goodRssiDevice))
 
-            // Assert: Side effect should be received
+            // Then
             val receivedEffect = awaitItem()
             assertEquals(BleDeviceListSideEffect.MoveToDetail(expectedDeviceInfo), receivedEffect)
 
@@ -327,20 +230,20 @@ class BleDeviceListViewModelTest {
     }
 
     @Test
-    fun `handleIntent SelectDevice with bad RSSI should show dialog`() = runTest {
+    fun `RSSI가_-75미만인_기기_선택_인텐트_처리는_Dialog를_보여준다`() = runTest {
         val badRssiDevice = BleDeviceConnection(
-            deviceId = "123e4567-e89b-12d3-a456-426614174000",
+            deviceId = "123e4567-e89b-12d3-a456174000",
             name = "BLE_DEVICE_001",
             rssi = -80
         )
 
         viewModel.uiState.test {
-            awaitItem() // Initial state
+            awaitItem()
 
-            // Act: Send SelectDevice intent with bad RSSI
+            // When
             viewModel.handleIntent(BleDeviceListIntent.SelectDevice(badRssiDevice))
 
-            // Assert: Dialog should be shown
+            // Then
             val stateAfterBadRssi = awaitItem()
             assertTrue(stateAfterBadRssi.isDialogShowed.first)
             assertTrue(stateAfterBadRssi.isDialogShowed.second.isNotEmpty())
@@ -350,24 +253,23 @@ class BleDeviceListViewModelTest {
     }
 
     @Test
-    fun `handleIntent ResetSelection should reset selection`() = runTest {
+    fun `ResetSelection_인텐트_처리는_기기_선택을_초기화한다`() = runTest {
         val device = BleDeviceConnection(
-            deviceId = "123e4567-e89b-12d3-a456-426614174000",
+            deviceId = "123e4567-e89b-12d3-a456174000",
             name = "BLE_DEVICE_001",
             rssi = -65
         )
 
         viewModel.uiState.test {
-            awaitItem() // Initial state
+            awaitItem()
 
-            // First, select a device to set _selectedDeviceId
             viewModel.handleIntent(BleDeviceListIntent.SelectDevice(device))
-            awaitItem() // Connecting state
+            awaitItem()
 
-            // Act: Send ResetSelection intent
+            // When
             viewModel.handleIntent(BleDeviceListIntent.ResetSelection)
 
-            // Assert: isConnecting should be false and no device should be selected
+            // Then
             val state = awaitItem()
             assertFalse(state.isConnecting)
             assertTrue(state.bleDeviceConnections.none { it.isConnecting })

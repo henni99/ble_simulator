@@ -3,6 +3,13 @@ package com.luxrobo.mock
 import com.luxrobo.model.BleDeviceConnection
 import com.luxrobo.model.BleDeviceInfo
 
+/**
+ * mockBleDeviceConnections
+ *
+ * BLE 디바이스 연결 정보의 샘플(모의) 데이터 리스트.
+ * 테스트 및 개발용으로 실제 연결된 장치 대신 사용됨.
+ */
+
 val mockBleDeviceConnections = listOf(
     BleDeviceConnection(
         deviceId = "123e4567-e89b-12d3-a456-426614174000",

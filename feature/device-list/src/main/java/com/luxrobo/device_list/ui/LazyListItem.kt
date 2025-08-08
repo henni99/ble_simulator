@@ -47,9 +47,7 @@ fun BleDeviceConnection(
         Row(
             modifier = Modifier
                 .background(Color.White)
-                .padding(
-                    horizontal = 16.dp,
-                    vertical = 16.dp),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
@@ -58,11 +56,10 @@ fun BleDeviceConnection(
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    style = LuxTheme.typography.titleLargeB,
+                    style = LuxTheme.typography.bodyLargeR,
                     color = Color.Black,
                     textAlign = TextAlign.Center,
                     text = uiState.name,
-                    fontSize = 16.sp,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
@@ -70,9 +67,8 @@ fun BleDeviceConnection(
                 VerticalSpacer(4.dp)
 
                 Text(
-                    style = LuxTheme.typography.bodyLargeR,
+                    style = LuxTheme.typography.bodySmallR,
                     color = Color.Gray,
-                    fontSize = 11.sp,
                     text = uiState.deviceId,
                     overflow = TextOverflow.Ellipsis,
                     minLines = 2,
@@ -103,8 +99,7 @@ fun BleDeviceConnection(
                     }
                 ) {
                     Text(
-                        fontSize = 12.sp,
-                        style = LuxTheme.typography.bodyLargeR,
+                        style = LuxTheme.typography.bodyMediumR,
                         textAlign = TextAlign.Center,
                         text = stringResource(R.string.bluetooth_list_connecting_status)
                     )
@@ -131,8 +126,7 @@ fun BleDeviceConnection(
                     HorizontalSpacer(4.dp)
 
                     Text(
-                        style = LuxTheme.typography.bodyLargeR,
-                        fontSize = 14.sp,
+                        style = LuxTheme.typography.bodyMediumR,
                         text = uiState.rssi.toString()
                     )
                 }

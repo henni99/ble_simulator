@@ -3,38 +3,27 @@ package com.luxrobo.designsystem.theme
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-private val SansSerifStyle = TextStyle(
-    fontFamily = FontFamily.SansSerif,
-    fontWeight = FontWeight.Bold,
-)
-
-internal val Typography = LuxTypography(
-    titleLargeB = SansSerifStyle.copy(
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-    ),
-    bodyLargeR = SansSerifStyle.copy(
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp,
-    )
-)
-
 @Immutable
 data class LuxTypography(
-    val titleLargeB: TextStyle,
-    val bodyLargeR: TextStyle
+    val titleLargeB: TextStyle = TextStyle(
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Bold
+    ),
+    val bodyLargeR: TextStyle = TextStyle(
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Medium
+    ),
+    val bodyMediumR: TextStyle = TextStyle(
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Medium
+    ),
+    val bodySmallR: TextStyle = TextStyle(
+        fontSize = 11.sp,
+        fontWeight = FontWeight.Medium
+    )
 )
 
-val LocalTypography = staticCompositionLocalOf {
-
-    LuxTypography(
-        titleLargeB = SansSerifStyle,
-        bodyLargeR = SansSerifStyle
-    )
-
-}
+internal val LocalTypography = staticCompositionLocalOf { LuxTypography() }

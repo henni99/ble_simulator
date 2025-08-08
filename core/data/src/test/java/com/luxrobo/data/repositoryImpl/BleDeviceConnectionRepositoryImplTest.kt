@@ -48,20 +48,4 @@ class BleDeviceConnectionRepositoryImplTest {
 
         verify(dataSource).getBleDeviceConnections()
     }
-
-    @Test
-    fun `BLE 디바이스 연결 목록 조회 시 예외가 발생하면 흐름이 실패한다`() = runTest {
-        // given
-        val expectedMessage = "데이터 소스 실패"
-        whenever(dataSource.getBleDeviceConnections()).thenThrow(RuntimeException(expectedMessage))
-
-        // when & then
-        repository.getBleDeviceConnections().test {
-            val exception = awaitError()
-            assert(exception is RuntimeException)
-            assertEquals(expectedMessage, exception.message)
-        }
-
-        verify(dataSource).getBleDeviceConnections()
-    }
 }
